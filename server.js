@@ -1,8 +1,10 @@
-let Discord = require("discord.js");
+const Discord = require("discord.js");
+
 let client = new Discord.Client();
 
 const {
   DISCORD_TOKEN = '',
+  DISCORD_CHANNEL = 'general',
 } = process.env;
 
 const fridays = [
@@ -10,18 +12,31 @@ const fridays = [
   "https://cdn.discordapp.com/attachments/394954465746223106/789518102299803678/video0.mp4"
 ];
 
-client.on("message", message => {
-  if (message.content === ".friday") {
+client.on("ready", async () => {
+    client.user.setActivity("memes on friday", { type: "STREAMING" });
+
     const attachment = new Discord.MessageAttachment(
-      fridays[Math.floor(Math.random() * fridays.length)],
-      "friday.mp4"
+        fridays[Math.floor(Math.random() * fridays.length)],
+        "friday.mp4"
     );
 
-    const embed = new Discord.MessageEmbed()
-      .setTitle("Friday");
+    const channels = client.guilds.cache.map((guild) => Array.from(guild.channels.cache.values())).flat(2);
 
-    message.channel.send(attachment).catch(console.error);
-  }
+    if (channels.length === 0) {
+        console.error('No channels found');
+        return;
+    }
+
+    const promises = channels.map((channel) => {
+        if (channel.type !== 'text' || channel.name !== DISCORD_CHANNEL) {
+            return null;
+        }
+        return channel.send(attachment);
+    });
+
+    await Promise.allSettled(promises);
+
+    process.exit(0);
 });
 
 client.login(DISCORD_TOKEN);
