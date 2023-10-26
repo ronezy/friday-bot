@@ -165,6 +165,7 @@ client.on("ready", async () => {
 				hasSentThursday = false;
 			}
 			else if(!hasSentThursday){
+				await sendThursdayMp4();
 				hasSentThursday = true;
 			}
 
