@@ -28,12 +28,19 @@ const fridays = [
     "https://cdn.discordapp.com/attachments/394954465746223106/1064601890169557102/Y2Mate.is_-_its_fat_fuck_friday_you_fucking_loser-MLESXo2YINY-1080p-1654757482535.mp4",
     "https://cdn.discordapp.com/attachments/394954465746223106/1064602786907566080/vV241RMWWJ-TaLYO.mp4",
     "https://cdn.discordapp.com/attachments/394954465746223106/1064603876097007686/Y2Mate.is_-_When_is_Friday_meme_Jojo_bizarre_adventure_Dio_Brando-mqLBL474aMk-720p-1656035210158.mp4",
+	
+];
+
+const thursday = [
+	"https://cdn.discordapp.com/attachments/297865936071950337/824403661866139668/Wednesday.mp4"
+	
 ];
 
 const isFriday = () => moment().day() === 5;
 const isFridayAt1700 = () => moment().day() === 5 && moment().hours() === 17 && moment().minute() === 0;
 const isMondayAt0000 = () => moment().day() === 1 && moment().hours() === 0 && moment().minute() === 0;
 const isMondayAt2359 = () => moment().day() === 1 && moment().hours() === 23 && moment().minute() === 59;
+const isThursdayAt1000 = () => moment().day() === 4 && moment().hours() === 10 && moment().minute() === 0;
 const randomStatusType = () => [Discord.ActivityType.Watching, Discord.ActivityType.Playing, Discord.ActivityType.Listening][Math.floor(Math.random() * 3)];
 
 const sendFridayMp4 = async () => {
@@ -77,8 +84,50 @@ const sendFridayMp4 = async () => {
     return { index, success };
 };
 
+const sendThursdayMp4 = async () => {
+    const index = Math.floor(Math.random() * thursday.length);
+
+    const attachment = new Discord.AttachmentBuilder()
+        .setFile(thursday[index], 'Thursday.mp4');
+
+    const channels = client.guilds.cache.map((guild) => Array.from(guild.channels.cache.values())).flat(2);
+
+    if (channels.length === 0) {
+        console.error('No channels found');
+        return { index, success: true };
+    }
+
+    const channelsToSend = channels.filter((channel) => channel.type === Discord.ChannelType.GuildText && channel.name === DISCORD_CHANNEL);
+    console.log();
+
+    const promises = channelsToSend.map((channel) => {
+        return channel.send({ files: [attachment] });
+    });
+
+    const results = await Promise.allSettled(promises);
+
+    let success = true;
+
+    results.forEach((result, index) => {
+        if (result.status === 'fulfilled') {
+            console.log(`Thursday.mp4 sent to channel ${channelsToSend[index].guild.name}/${channelsToSend[index].name}: OK`);
+        } else {
+            success = false;
+            try {
+                console.error(`Error sending Thursday.mp4 to channel ${channelsToSend[index].guild.name}/${channelsToSend[index].name}: `, result.reason);
+                console.error(`(stringified): `, JSON.stringify(result.reason));
+            } catch (err) {
+                console.error('stringification error: ', err);
+            }
+        }
+    });
+
+    return { index, success };
+};
+
 client.on("ready", async () => {
     let hasSent = false;
+	let hasSentThursday = false;
 
     console.log('Friday bot ready');
 
@@ -111,6 +160,13 @@ client.on("ready", async () => {
                 });
                 await new Promise(r => setTimeout(r, 10 * 1000));
             }
+			
+			if (!isThursdayAt1000()){
+				hasSentThursday = false;
+			}
+			else if(!hasSentThursday){
+				hasSentThursday = true;
+			}
 
             if (!isFridayAt1700()) {
                 hasSent = false;
