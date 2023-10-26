@@ -15,7 +15,6 @@ const fridayType = [
     "normal",
     "firegator",
     "normal",
-    "normal",
     "flat",
     "normal",
     "normal"
@@ -26,7 +25,6 @@ const fridays = [
     "https://cdn.discordapp.com/attachments/394954465746223106/789518102299803678/video0.mp4",
     "https://cdn.discordapp.com/attachments/394954465746223106/1064601080891195422/Y2Mate.is_-_Fire_Gator_Friday_guys-dAOapNthDs8-480p-1659855004124.mp4",
     "https://cdn.discordapp.com/attachments/394954465746223106/1064601556743376966/Y2Mate.is_-_Martti_Servo_-_Viikonloppu-vkVidHRkF88-480p-1657577476045.mp4",
-    "https://cdn.discordapp.com/attachments/394954465746223106/1083819743447896164/y2mate.com_-_Michael_Gray_The_Weekend_Official_Video_v240P.mp4",
     "https://cdn.discordapp.com/attachments/394954465746223106/1064601890169557102/Y2Mate.is_-_its_fat_fuck_friday_you_fucking_loser-MLESXo2YINY-1080p-1654757482535.mp4",
     "https://cdn.discordapp.com/attachments/394954465746223106/1064602786907566080/vV241RMWWJ-TaLYO.mp4",
     "https://cdn.discordapp.com/attachments/394954465746223106/1064603876097007686/Y2Mate.is_-_When_is_Friday_meme_Jojo_bizarre_adventure_Dio_Brando-mqLBL474aMk-720p-1656035210158.mp4",
